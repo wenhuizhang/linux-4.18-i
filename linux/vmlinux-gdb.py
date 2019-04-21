@@ -1,0 +1,1 @@
+/home/wenhui/Downloads/linux/scripts/gdb/vmlinux-gdb.py
