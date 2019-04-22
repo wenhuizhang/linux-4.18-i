@@ -29,6 +29,8 @@
 #include <linux/init.h>
 #include <linux/rculist.h>
 
+
+// wenhui checking and counting LSM hooks
 /**
  * union security_list_options - Linux Security Module hook function list
  *
