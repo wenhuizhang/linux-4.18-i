@@ -166,8 +166,10 @@ void __init security_add_hooks(struct security_hook_list *hooks, int count,
 				char *lsm)
 {
 	int i;
+	printk(KERN_ALERT "\n******wenhui*************\n Number of Hooks: %d\n", count);
 
 	for (i = 0; i < count; i++) {
+		printk(KERN_ALERT "LSM name d% is s%\n", i , lsm);
 		hooks[i].lsm = lsm;
 		hlist_add_tail_rcu(&hooks[i].list, hooks[i].head);
 	}
