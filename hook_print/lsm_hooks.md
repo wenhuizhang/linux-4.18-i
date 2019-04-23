@@ -1,3 +1,7 @@
+# LSM HOOKS
+This file is a mirror of file ***LSM Hooks: ./linux/include/lsm_hooks.h***
+
+```
 /*
  * Linux Security Module interfaces
  *
@@ -2079,3 +2083,4 @@ static inline void loadpin_add_hooks(void) { };
 #endif
 
 #endif /* ! __LINUX_LSM_HOOKS_H */
+```
