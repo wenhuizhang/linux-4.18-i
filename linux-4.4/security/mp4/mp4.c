@@ -114,6 +114,7 @@ static int get_inode_sid(struct inode *inode)
  //https://piazza.com/class/jcgqvneo9tn1o0?cid=566
 static int mp4_bprm_set_creds(struct linux_binprm *bprm)
 {
+	printk("3: mp4_bprm_set_creds hooks: mp4 LSM starting...\n");
 	int osid;
 	struct inode * inode;
 	struct mp4_security * curr_blob;
@@ -154,6 +155,7 @@ static int mp4_bprm_set_creds(struct linux_binprm *bprm)
 	// if(printk_ratelimit()) {
 	// 	pr_info("4th HOOK: mp4_bprm_set_creds succeeds!");
 	// }
+	printk("3: mp4_bprm_set_creds hooks: mp4 LSM finishing...\n");
 
 	return 0;
 }
@@ -171,6 +173,7 @@ static int mp4_bprm_set_creds(struct linux_binprm *bprm)
 static int mp4_cred_alloc_blank(struct cred *cred, gfp_t gfp)
 {
      //Add your code here
+	printk("4: mp4_cred_alloc_blank hooks: mp4 LSM starting...\n");
 	 struct mp4_security * my_security_blob;
 
 	 if(!cred){
@@ -191,6 +194,7 @@ static int mp4_cred_alloc_blank(struct cred *cred, gfp_t gfp)
  	// 		pr_info("1ST HOOK: mp4_cred_alloc_blank succeeds!");
  	// 	 }
 
+	printk("4: mp4_cred_alloc_blank hooks: mp4 LSM finishing...\n");
 	 return 0;
 }
 
@@ -205,6 +209,8 @@ static int mp4_cred_alloc_blank(struct cred *cred, gfp_t gfp)
  //first three hook some ideas: https://piazza.com/class/jcgqvneo9tn1o0?cid=575
 static void mp4_cred_free(struct cred *cred)
 {
+	printk("5: mp4_cred_free hooks: mp4 LSM starting...\n");
+	 return 0;
 	/*
 	 * Add your code here
 	 * ...
@@ -228,6 +234,7 @@ static void mp4_cred_free(struct cred *cred)
 	 cred->security = NULL;
 
 	 //pr_info("3RD HOOK: mp4_cred_free succeeds!");
+	printk("5: mp4_cred_free hooks: mp4 LSM finishing...\n");
 }
 
 /**
@@ -240,6 +247,7 @@ static void mp4_cred_free(struct cred *cred)
  */
 static int mp4_cred_prepare(struct cred *new, const struct cred *old, gfp_t gfp)
 {
+	printk("6: mp4_cred_prepare hooks: mp4 LSM starting...\n");
 	struct mp4_security *old_blob;
 	struct mp4_security * new_blob;
 
@@ -267,6 +275,7 @@ static int mp4_cred_prepare(struct cred *new, const struct cred *old, gfp_t gfp)
 	}
 
 	//pr_info("2ND hook: mp4_cred_prepare works!");
+	printk("6: mp4_cred_prepare hooks: mp4 LSM finishing...\n");
 
 	return 0;
 
@@ -305,6 +314,7 @@ static int mp4_inode_init_security(struct inode *inode, struct inode *dir,
 	 * Add your code here
 	 * ...
 	 */
+	printk("1: mp4_inode_init_security hooks: mp4 LSM starting...");
 	struct mp4_security * curr_cred;
 	int task_sid;
 	char *name_ptr;
@@ -368,6 +378,7 @@ static int mp4_inode_init_security(struct inode *inode, struct inode *dir,
 	// if(printk_ratelimit()) {
 	//    pr_info("5th HOOK: mp4_inode_init_security called!");
 	// }
+	printk("1: mp4_inode_init_security hooks: mp4 LSM finishing...");
 
 	return 0;
 }
@@ -435,6 +446,7 @@ static int mp4_has_permission(int ssid, int osid, int mask)
 
 static int mp4_inode_permission(struct inode *inode, int mask)
 {
+	printk("2: mp4_inode_permission hooks: mp4 LSM starting...\n");
 
 	 struct dentry *dentry;
 	 struct mp4_security *current_cred;
@@ -534,6 +546,9 @@ static int mp4_inode_permission(struct inode *inode, int mask)
  	 if(dentry)
 	 	dput(dentry);
 	 kfree(buf);
+
+
+	  printk("2: mp4_inode_permission hooks: mp4 LSM finishing...\n");
 	 return ret; /* permissive */
 	 //return 0;
 }
@@ -573,7 +588,7 @@ static __init int mp4_init(void)
 		return 0;
 	}
 
-	printk("Mytest for 1st-6th hooks: mp4 LSM initializing..");
+	printk("Mytest for 1st-6th hooks: mp4 LSM initializing..\n");
 
 	/*
 	 * Register the mp4 hooks with lsm
