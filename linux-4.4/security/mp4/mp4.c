@@ -571,9 +571,6 @@ static __init int mp4_init(void)
 	if (!security_module_enable("mp4")) {
 		printk("mp4 is not enabled\n");
 		return 0;
-	} else {
-		printk("mp4 is enabled\n");
-		return 0;
 	}
 
 	printk("Mytest for 1st-6th hooks: mp4 LSM initializing..");
