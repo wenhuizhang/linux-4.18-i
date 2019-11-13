@@ -35,9 +35,6 @@
  */
 struct mp4_security {
 	int mp4_flags; //sid
-	/* add any supporting definitions here if needed
-	 * ...
-	 */
 };
 
 /**
@@ -97,8 +94,5 @@ static inline int mp4_should_skip_path(const char *dir)
 
 	return 0;
 }
-
-
-/* NOTE: operation masks can be found in linux/fs.h */
 
 #endif /* _SECURITY_MP4_GIVEN_H */
