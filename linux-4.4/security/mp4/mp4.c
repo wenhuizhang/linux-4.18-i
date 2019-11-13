@@ -445,8 +445,6 @@ static unsigned long cnt = 0;
 
 static int mp4_inode_permission(struct inode *inode, int mask)
 {
-	printk("2: mp4_inode_permission hooks: mp4 LSM starting...\n");
-
 	struct dentry *dentry;
 	struct mp4_security *current_cred;
 	char *dir;
