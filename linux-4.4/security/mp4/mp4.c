@@ -15,7 +15,7 @@
 #include "mp4.h"
 
 /**
- * get_inode_sid - Get the inode mp4 security label id
+ * get_inode_sid - Get the inode security label id
  *
  * @inode: the input inode
  *
@@ -119,6 +119,7 @@ static int mp4_bprm_set_creds(struct linux_binprm *bprm)
 	// 1.read the xattr value of the inode used to create the process
 	// read the xattr value of the inode, get the label out of it
 	osid = get_inode_sid(inode);
+	printk("%s : osid is %d\n", __func__, osid);
 
 	// 2.if that labels reads MP4 TARGET SID
 	if (osid == MP4_TARGET_SID) {
@@ -138,6 +139,7 @@ static int mp4_bprm_set_creds(struct linux_binprm *bprm)
  * mp4_cred_alloc_blank - Allocate a blank mp4 security label
  *
  * @cred: the new credentials
+ * 
  * @gfp: the atomicity of the memory allocation
  *
  */
@@ -156,6 +158,7 @@ static int mp4_cred_alloc_blank(struct cred *cred, gfp_t gfp)
 	}
 
 	my_security_blob = (struct mp4_security *)kmalloc(sizeof(struct mp4_security), gfp);
+	
 	if(!my_security_blob) {
 		return -ENOMEM;
 	}
@@ -174,7 +177,6 @@ static int mp4_cred_alloc_blank(struct cred *cred, gfp_t gfp)
  *
  */
 
-//first three hook some ideas: https://piazza.com/class/jcgqvneo9tn1o0?cid=575
 static void mp4_cred_free(struct cred *cred)
 {
 	if(!cred) {
@@ -203,7 +205,7 @@ static void mp4_cred_free(struct cred *cred)
 static int mp4_cred_prepare(struct cred *new, const struct cred *old, gfp_t gfp)
 {
 	struct mp4_security *old_blob;
-	struct mp4_security * new_blob;
+	struct mp4_security *new_blob;
 
 	if(!new) {
 		return -ENOMEM;
