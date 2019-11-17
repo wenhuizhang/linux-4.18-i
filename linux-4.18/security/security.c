@@ -41,9 +41,11 @@ struct security_hook_heads security_hook_heads __lsm_ro_after_init;
 static ATOMIC_NOTIFIER_HEAD(lsm_notifier_chain);
 
 char *lsm_names;
+
+
 /* Boot-time LSM user choice */
-static __initdata char chosen_lsm[SECURITY_NAME_MAX + 1] =
-	CONFIG_DEFAULT_SECURITY;
+#define CONFIG_DEFAULT_SECURITY  ""
+static __initdata char chosen_lsm[SECURITY_NAME_MAX + 1] = CONFIG_DEFAULT_SECURITY;
 
 static void __init do_security_initcalls(void)
 {

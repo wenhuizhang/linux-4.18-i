@@ -2018,9 +2018,41 @@ struct security_hook_list {
 	char				*lsm;
 } __randomize_layout;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+Security blob size or offset data.
+ */
+struct lsm_blob_sizes {
+	int	lbs_cred;
+	int	lbs_file;
+	int	lbs_inode;
+	int	lbs_ipc;
+	int	lbs_msg_msg;
+	int	lbs_task;
+};
+ 
+
 /*
  * Initializing a security_hook_list structure takes
- * up a lot of space in a source file. This macro takes
+* up a lot of space in a source file. This macro takes
  * care of the common case and reduces the amount of
  * text involved.
  */
@@ -2030,8 +2062,55 @@ struct security_hook_list {
 extern struct security_hook_heads security_hook_heads;
 extern char *lsm_names;
 
-extern void security_add_hooks(struct security_hook_list *hooks, int count,
-				char *lsm);
+extern void security_add_hooks(struct security_hook_list *hooks, int count, char *lsm);
+
+
+
+#define LSM_FLAG_LEGACY_MAJOR	BIT(0)
+#define LSM_FLAG_EXCLUSIVE	BIT(1)
+
+enum lsm_order {
+	LSM_ORDER_FIRST = -1,	/* This is only for capabilities. */
+	LSM_ORDER_MUTABLE = 0,
+};
+
+struct lsm_info {
+	const char *name;	/* Required. */
+	enum lsm_order order;	/* Optional: default is LSM_ORDER_MUTABLE */
+	unsigned long flags;	/* Optional: flags describing LSM */
+	int *enabled;		/* Optional: controlled by CONFIG_LSM */
+	int (*init)(void);	/* Required. */
+	struct lsm_blob_sizes *blobs; /* Optional: for blob sharing. */
+};
+
+extern struct lsm_info __start_lsm_info[], __end_lsm_info[];
+extern struct lsm_info __start_early_lsm_info[], __end_early_lsm_info[];
+
+#define DEFINE_LSM(lsm)							\
+	static struct lsm_info __lsm_##lsm				\
+		__used __section(.lsm_info.init)			\
+		__aligned(sizeof(unsigned long))
+
+#define DEFINE_EARLY_LSM(lsm)						\
+	static struct lsm_info __early_lsm_##lsm			\
+		__used __section(.early_lsm_info.init)			\
+		__aligned(sizeof(unsigned long))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #ifdef CONFIG_SECURITY_SELINUX_DISABLE
 /*
@@ -2062,6 +2141,24 @@ static inline void security_delete_hooks(struct security_hook_list *hooks,
 #else
 #define __lsm_ro_after_init	__ro_after_init
 #endif /* CONFIG_SECURITY_WRITABLE_HOOKS */
+
+// wenhui start 
+
+/* Currently required to handle SELinux runtime hook disable. */
+#ifdef CONFIG_SECURITY_WRITABLE_HOOKS
+#define __lsm_ro_after_init
+#else
+#define __lsm_ro_after_init	__ro_after_init
+#endif /* CONFIG_SECURITY_WRITABLE_HOOKS */
+
+extern int lsm_inode_alloc(struct inode *inode);
+
+// wenhui end
+
+
+
+
+
 
 extern int __init security_module_enable(const char *module);
 extern void __init capability_add_hooks(void);
