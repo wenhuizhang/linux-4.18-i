@@ -9,8 +9,8 @@
 cd linux-4.18/
 
 sudo apt-get build-dep linux-image-$(uname -r)
-sudo apt-get install make cmake make-guile libncurses5-dev flex bison libssl-dev dkms libelf-dev
-sudo apt-get install git
+sudo apt-get install make cmake libncurses5-dev flex bison libssl-dev dkms libelf-dev git
+
 
 cp /boot/config-4.18.0-25-generic  .config
 
